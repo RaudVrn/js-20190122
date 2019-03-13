@@ -105,3 +105,17 @@ ul.specs dt {
 h1 {
   border-bottom: 1px solid gray;
 }
+
+.basket__item {
+  position: relative;
+}
+
+.basket__remove-button {
+  position: absolute;
+  top: 0;
+  right: -15px;
+  margin-left: 15px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+}

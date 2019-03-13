@@ -1,14 +1,19 @@
 export default class PhonesCatalog {
-  constructor({ element, phones, onPhoneSelected }) {
+  constructor({ element, phones, onPhoneSelected, onAddToBasket }) {
     this._element = element;
 
     this._props = {
       phones: phones,
       onPhoneSelected: onPhoneSelected,
+      onAddToBasket,
     };
 
     this._render();
     this._initEventListeners();
+  }
+
+  show() {
+    this._element.hidden = false;
   }
 
   hide() {
@@ -24,6 +29,20 @@ export default class PhonesCatalog {
       }
 
       this._props.onPhoneSelected(detailsLink.dataset.phoneId);
+    });
+
+    this._element.addEventListener('click', (event) => {
+      const addToBasketButton = event.target.closest('.btn-success');
+
+      if (!addToBasketButton){
+        return
+      }
+
+      let item = this._props.phones.find((element) => {
+        return element.id === addToBasketButton.dataset.phoneId;
+      });
+
+      this._props.onAddToBasket(item);
     });
   }
 
@@ -43,7 +62,9 @@ export default class PhonesCatalog {
             </a>
   
             <div class="phones__btn-buy-wrapper">
-              <a class="btn btn-success">
+              <a 
+              data-phone-id="${phone.id}"
+              class="btn btn-success">
                 Add
               </a>
             </div>

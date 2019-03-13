@@ -12,6 +12,7 @@ export default class PhonesPage {
     this._state = {
       phones: PhonesService.getAll(),
       selectedPhone: null,
+      basket: []
     };
 
     this._render();
@@ -33,18 +34,50 @@ export default class PhonesPage {
         this._catalog.hide();
         this._viewer.show(selectedPhone);
       },
+
+      onAddToBasket: (item) => {
+        this._state.basket.push(item.id);
+        this._cart.addToCart(item);
+        console.log(this._state.basket);
+      },
     });
   }
 
   _initViewer() {
+
     this._viewer = new PhoneViewer({
       element: this._element.querySelector('[data-component="PhoneViewer"]'),
+
+      onPhoneDetailsHide: () => {
+
+        this._state.selectedPhone = null;
+
+        this._catalog.show();
+        this._viewer.hide();
+      },
+
+      onAddToBasket: (item) => {
+        this._state.basket.push(item.id);
+        this._cart.addToCart(item);
+
+
+      }
+
     });
+
   }
 
   _initCart() {
     this._cart = new ShoppingCart({
       element: this._element.querySelector('[data-component="ShoppingCart"]'),
+
+      onRemoveFromBasket: (item) => {
+        // console.log(item.dataset.id);
+        // console.log(this._state.basket.indexOf(item.dataset.id));
+        // console.log(this._state.basket);
+        this._state.basket.splice(this._state.basket.indexOf(item.dataset.id), 1);
+        this._cart.removeFromCart(item)
+      }
     });
   }
 
